@@ -4,7 +4,7 @@ import { schoolApi } from './Context/globalContext';
 import { useState } from 'react';
 
 function App() {
-  const [apiData, setApiData] = useState('ㅎㅎ');
+  const [apiData, setApiData] = useState([]);
 
   return (
     <>
