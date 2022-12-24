@@ -4,21 +4,15 @@ import { schoolApi } from '../Context/globalContext';
 import axios from 'axios';
 const Home = () => {
   const { apiData, setApiData } = useContext(schoolApi);
-  const apiKey =
-    'Zlb1Vzz%2FXozCyf%2FKGFcPfYHNHsEo0DMxI1YIS5bD1y22HauG3TKirP8dr9aAVg8U5ZpSvWxEC2ppvuXNY7XyYA%3D%3D';
+  const PROXY = '/data';
+  const apiKey = '9722078016';
   const defaultClient = () => {
     axios
       .get(
-        `https://api.odcloud.kr/api/15062028/v1/uddi:58093a45-2905-49a3-9c74-f3226e1581e0?page=1&perPage=5&returnType=JSON&serviceKey=%09%20Zlb1Vzz%2FXozCyf%2FKGFcPfYHNHsEo0DMxI1YIS5bD1y22HauG3TKirP8dr9aAVg8U5ZpSvWxEC2ppvuXNY7XyYA%3D%3D`,
-        {
-          headers: {
-            accept: 'application/json',
-            Authorization: apiKey,
-          },
-        }
+        `http://data.ex.co.kr/openapi/locationinfo/locationinfoUnit?key=9722078016&type=json&routeNo=2&unitCode=1&numOfRows=1&pageNo=1`
       )
       .then((res) => {
-        const datas = res.data.definitions;
+        const datas = res;
         // parseStr(datas);
         console.log('datas', datas);
       })
