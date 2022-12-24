@@ -4,21 +4,16 @@ import { schoolApi } from '../Context/globalContext';
 import axios from 'axios';
 const Home = () => {
   const { apiData, setApiData } = useContext(schoolApi);
+  const PROXY = '/data';
   const apiKey =
-    'Zlb1Vzz%2FXozCyf%2FKGFcPfYHNHsEo0DMxI1YIS5bD1y22HauG3TKirP8dr9aAVg8U5ZpSvWxEC2ppvuXNY7XyYA%3D%3D';
+    'Zlb1Vzz/XozCyf/KGFcPfYHNHsEo0DMxI1YIS5bD1y22HauG3TKirP8dr9aAVg8U5ZpSvWxEC2ppvuXNY7XyYA==';
   const defaultClient = () => {
     axios
       .get(
-        `https://api.odcloud.kr/api/15062028/v1/uddi:58093a45-2905-49a3-9c74-f3226e1581e0?page=1&perPage=5&returnType=JSON&serviceKey=%09%20Zlb1Vzz%2FXozCyf%2FKGFcPfYHNHsEo0DMxI1YIS5bD1y22HauG3TKirP8dr9aAVg8U5ZpSvWxEC2ppvuXNY7XyYA%3D%3D`,
-        {
-          headers: {
-            accept: 'application/json',
-            Authorization: apiKey,
-          },
-        }
+        `${PROXY}/rest/shoppingcenter/getShoppingcenterList?authApiKey=${apiKey}&dataValue=%EB%82%98%EB%B9%84%EB%8A%98%EA%BD%83`
       )
       .then((res) => {
-        const datas = res.data.definitions;
+        const datas = res.data;
         // parseStr(datas);
         console.log('datas', datas);
       })
