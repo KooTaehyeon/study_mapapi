@@ -5,15 +5,14 @@ import axios from 'axios';
 const Home = () => {
   const { apiData, setApiData } = useContext(schoolApi);
   const PROXY = '/data';
-  const apiKey =
-    'Zlb1Vzz/XozCyf/KGFcPfYHNHsEo0DMxI1YIS5bD1y22HauG3TKirP8dr9aAVg8U5ZpSvWxEC2ppvuXNY7XyYA==';
+  const apiKey = '9722078016';
   const defaultClient = () => {
     axios
       .get(
-        `${PROXY}/rest/shoppingcenter/getShoppingcenterList?authApiKey=${apiKey}&dataValue=%EB%82%98%EB%B9%84%EB%8A%98%EA%BD%83`
+        `http://data.ex.co.kr/openapi/locationinfo/locationinfoUnit?key=9722078016&type=json&routeNo=2&unitCode=1&numOfRows=1&pageNo=1`
       )
       .then((res) => {
-        const datas = res.data;
+        const datas = res;
         // parseStr(datas);
         console.log('datas', datas);
       })
