@@ -4,30 +4,39 @@ import { schoolApi } from '../Context/globalContext';
 import axios from 'axios';
 const Home = () => {
   const { apiData, setApiData } = useContext(schoolApi);
+  console.log(apiData);
   const PROXY = '/data';
-  const apiKey = '9722078016';
+  const apiKey =
+    'Zlb1Vzz%2FXozCyf%2FKGFcPfYHNHsEo0DMxI1YIS5bD1y22HauG3TKirP8dr9aAVg8U5ZpSvWxEC2ppvuXNY7XyYA%3D%3D';
   const defaultClient = () => {
     axios
       .get(
-        `http://data.ex.co.kr/openapi/locationinfo/locationinfoUnit?key=9722078016&type=json&routeNo=2&unitCode=1&numOfRows=1&pageNo=1`
+        `http://apis.data.go.kr/1532000/KCG_Station_Position/list_view?serviceKey=${apiKey}&rowsCount=3&startPage=1`
       )
       .then((res) => {
-        const datas = res;
-        // parseStr(datas);
+        const datas = res.data;
         console.log('datas', datas);
+
+        parseStr(datas);
       })
       .catch((err) => {
         console.log(err, '에러');
       });
   };
   function parseStr(dataSet) {
-    const dataArr = new XMLParser().parseFromString(dataSet).children;
-    setApiData(dataArr[1]);
+    const dataArr = new XMLParser().parseFromString(dataSet);
+    setApiData(dataArr.children[6]);
+    console.log(
+      'dataArr.children[6]',
+      dataArr.children[6].children[0].children[0].value,
+      dataArr.children[6].children[0].children[1].value,
+      dataArr.children[6].children[0].children[2].value
+    );
   }
   useEffect(() => {
     defaultClient();
   }, []);
-  console.log('apiData', apiData);
+  console.log('apiData1', apiData.children);
 
   return <div>홈 메인 페이지</div>;
 };
