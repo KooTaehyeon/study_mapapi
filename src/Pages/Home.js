@@ -2,10 +2,10 @@ import React, { useEffect, useContext, useState } from 'react';
 import XMLParser from 'react-xml-parser';
 import { schoolApi } from '../Context/globalContext';
 import axios from 'axios';
+import Map from '../Components/Map';
 const Home = () => {
   const { apiData, setApiData } = useContext(schoolApi);
   console.log(apiData);
-  const PROXY = '/data';
   const apiKey =
     'Zlb1Vzz%2FXozCyf%2FKGFcPfYHNHsEo0DMxI1YIS5bD1y22HauG3TKirP8dr9aAVg8U5ZpSvWxEC2ppvuXNY7XyYA%3D%3D';
   const defaultClient = () => {
@@ -38,7 +38,7 @@ const Home = () => {
   }, []);
   console.log('apiData1', apiData.children);
 
-  return <div>홈 메인 페이지</div>;
+  return <div>{/* <Map /> */}</div>;
 };
 
 export default Home;
