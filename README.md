@@ -15,7 +15,7 @@
 1. `clone` the repository,
 
 ```
-$ git clone "https://github.com/wanted-Team4/wanted-codestates-project-4-3.git"
+$ git clone "https://github.com/KooTaehyeon/study_mapapi.git"
 ```
 
 2. `Install` dependencies,
