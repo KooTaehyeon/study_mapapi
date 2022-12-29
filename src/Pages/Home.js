@@ -1,7 +1,5 @@
 import React, { useEffect, useContext, useState } from 'react';
-import XMLParser from 'react-xml-parser';
 import { schoolApi } from '../Context/globalContext';
-import axios from 'axios';
 import Map from '../Components/Map';
 import useFetch from '../hook/useApi';
 const Home = () => {
@@ -14,10 +12,9 @@ const Home = () => {
       y: 0,
     },
   ]);
-  const apiKey =
-    'Zlb1Vzz%2FXozCyf%2FKGFcPfYHNHsEo0DMxI1YIS5bD1y22HauG3TKirP8dr9aAVg8U5ZpSvWxEC2ppvuXNY7XyYA%3D%3D';
+
   const [value] = useFetch(
-    `http://apis.data.go.kr/1532000/KCG_Station_Position/list_view?serviceKey=${apiKey}&rowsCount=5&startPage=1`
+    `http://apis.data.go.kr/1532000/KCG_Station_Position/list_view?serviceKey=${process.env.REACT_APP_APIKEY}&rowsCount=5&startPage=1`
   );
   console.log(value, '초기');
 
