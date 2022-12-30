@@ -5,6 +5,7 @@ const useFetch = (initalUrl) => {
   const [url, setUrl] = useState(initalUrl);
   const [value, setValue] = useState('');
   useEffect(() => {
+    console.log('실행');
     fetchData();
   }, [url]);
   const fetchData = () => axios.get(url).then(({ data }) => parseStr(data));

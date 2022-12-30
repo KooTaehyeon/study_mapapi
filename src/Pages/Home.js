@@ -14,10 +14,9 @@ const Home = () => {
   ]);
 
   const [value] = useFetch(
-    `http://apis.data.go.kr/1532000/KCG_Station_Position/list_view?serviceKey=${process.env.REACT_APP_APIKEY}&rowsCount=5&startPage=1`
+    `http://apis.data.go.kr/1532000/KCG_Station_Position/list_view?serviceKey=${process.env.REACT_APP_API_URL}&rowsCount=5&startPage=1`
   );
-  console.log(value, '초기');
-
+  console.log(value, 'qpff');
   useEffect(() => {}, []);
   console.log(apiData, '클릭이벤트 실행시');
   const onClickHanddler = () => {
