@@ -1,20 +1,94 @@
-import React, { useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { schoolApi } from '../Context/globalContext';
+import useFetch from '../hook/useApi';
+import XMLParser from 'react-xml-parser';
+import axios from 'axios';
 
 /** @jsxImportSource @emotion/react */
 import { jsx, css } from '@emotion/react';
 
 const Map = () => {
   const [menuStatus, setMenuStatus] = useState(false);
+  const { apiData, setApiData } = useContext(schoolApi);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
 
+  console.log(apiData);
+  
   const menuHandler = () => {
     setMenuStatus(!menuStatus);
   };
+
+  // const [value] = useFetch(
+  //   `http://apis.data.go.kr/1532000/KCG_Station_Position/list_view?serviceKey=${process.env.REACT_APP_API_URL}&rowsCount=5&startPage=${page}`
+  // );
+
+  const getNewData = () => {
+      console.log("새로운 데이터를 가져옴");
+      console.log(page,"new");
+      const fetchData = () => 
+        axios.get(`http://apis.data.go.kr/1532000/KCG_Station_Position/list_view?serviceKey=${process.env.REACT_APP_API_URL}&rowsCount=5&startPage=${page}`)
+        .then(({ data }) => parseStr(data));
+      setLoading(false);
+      fetchData();
+  }
+
+  function parseStr(dataSet) {
+    const dataArr = new XMLParser().parseFromString(dataSet);
+    const newData = dataArr.children[6];
+    const newValue = newData.children.map((item, idx) => {
+      const body = {
+        id: idx,
+        name: item.children[0].value,
+        x: item.children[1].value,
+        y: item.children[2].value,
+      };
+      return body;
+    });
+    console.log(newValue,page);
+    setApiData(apiData.concat(newValue))
+  }
+  console.log(apiData,"Wks");
+
+  const _infiniteScroll = useCallback(() => {
+    // 스크롤 높이 값
+    let scrollHeight = Math.max(
+      document.documentElement.scrollHeight,
+      document.querySelector('.menuConatiner').scrollHeight
+    );
+    // 스크롤 top 값
+    let scrollTop = Math.max(
+      document.documentElement.scrollTop,
+      document.querySelector('.menuConatiner').scrollTop
+    );
+    // 화면높이
+    let clientHeight = document.documentElement.clientHeight;
+
+    if (scrollTop + clientHeight >= scrollHeight) {
+        console.log("끝에 닿았따!");
+        setLoading(true)
+        setPage( page + 1 );
+    }
+      
+  }, []);
+
+  useEffect(() => {
+    getNewData();
+  } , [page])
+
+  useEffect(() => {
+    const menuContainer = document.querySelector('.menuConatiner');
+    menuContainer.addEventListener("scroll", _infiniteScroll, true);
+    return () => menuContainer.removeEventListener("scroll", _infiniteScroll, true);
+  }, [_infiniteScroll])
+
+  // console.log(value,'value');
 
   return (
     <>
       <header css={headerStyle}>
         <div css={logoStyle}>
-          <span>소방서</span>
+          <span>파출소</span>
         </div>
         <div
           css={menuStyle}
@@ -27,140 +101,25 @@ const Map = () => {
         </div>
       </header>
       <section css={mapStyle}>지도 영역</section>
-      <section css={rightStyle} className={menuStatus ? 'on' : ''}>
-        <div css={contentStyle}>
-          <p>제목</p>
-          <p>- 주소 : </p>
-          <p>- 메모 : </p>
-          <ul css={btnStyle}>
-            <li>
-              <button>수정</button>
-            </li>
-            <li>
-              <button>삭제</button>
-            </li>
-          </ul>
-        </div>
-        <div css={contentStyle}>
-          <p>제목</p>
-          <p>- 주소 : </p>
-          <p>
-            - 메모 : <br />
-            <textarea placeholder='메모를 입력해주세요.'></textarea>
-          </p>
-          <ul css={btnStyle}>
-            <li>
-              <button>수정</button>
-            </li>
-            <li>
-              <button>삭제</button>
-            </li>
-          </ul>
-        </div>
-        <div css={contentStyle}>
-          <p>제목</p>
-          <p>- 주소 : </p>
-          <p>- 메모 : </p>
-          <ul css={btnStyle}>
-            <li>
-              <button>수정</button>
-            </li>
-            <li>
-              <button>삭제</button>
-            </li>
-          </ul>
-        </div>
-        <div css={contentStyle}>
-          <p>제목</p>
-          <p>- 주소 : </p>
-          <p>- 메모 : </p>
-          <ul css={btnStyle}>
-            <li>
-              <button>수정</button>
-            </li>
-            <li>
-              <button>삭제</button>
-            </li>
-          </ul>
-        </div>
-        <div css={contentStyle}>
-          <p>제목</p>
-          <p>- 주소 : </p>
-          <p>- 메모 : </p>
-          <ul css={btnStyle}>
-            <li>
-              <button>수정</button>
-            </li>
-            <li>
-              <button>삭제</button>
-            </li>
-          </ul>
-        </div>
-        <div css={contentStyle}>
-          <p>제목</p>
-          <p>- 주소 : </p>
-          <p>- 메모 : </p>
-          <ul css={btnStyle}>
-            <li>
-              <button>수정</button>
-            </li>
-            <li>
-              <button>삭제</button>
-            </li>
-          </ul>
-        </div>
-        <div css={contentStyle}>
-          <p>제목</p>
-          <p>- 주소 : </p>
-          <p>- 메모 : </p>
-          <ul css={btnStyle}>
-            <li>
-              <button>수정</button>
-            </li>
-            <li>
-              <button>삭제</button>
-            </li>
-          </ul>
-        </div>
-        <div css={contentStyle}>
-          <p>제목</p>
-          <p>- 주소 : </p>
-          <p>- 메모 : </p>
-          <ul css={btnStyle}>
-            <li>
-              <button>수정</button>
-            </li>
-            <li>
-              <button>삭제</button>
-            </li>
-          </ul>
-        </div>
-        <div css={contentStyle}>
-          <p>제목</p>
-          <p>- 주소 : </p>
-          <p>- 메모 : </p>
-          <ul css={btnStyle}>
-            <li>
-              <button>수정</button>
-            </li>
-            <li>
-              <button>삭제</button>
-            </li>
-          </ul>
-        </div>
-        <div css={contentStyle}>
-          <p>제목</p>
-          <p>- 주소 : </p>
-          <p>- 메모 : </p>
-          <ul css={btnStyle}>
-            <li>
-              <button>수정</button>
-            </li>
-            <li>
-              <button>삭제</button>
-            </li>
-          </ul>
-        </div>
+      <section css={rightStyle} className={`${menuStatus ? 'on' : ''} menuConatiner`}>
+          { apiData && apiData.map((item, idx) => (
+            <div css={contentStyle} key={idx}>
+              <p>-  {item.name}</p>
+              <p>- 위치 : (위도 : {item.x}) , (경도 : {item.y})</p>
+              <p>- 메모 : 
+                <textarea placeholder='메모를 입력해주세요.'></textarea>
+              </p>
+              <ul css={btnStyle}>
+                <li>
+                  <button>추가</button>
+                </li>
+                {/* <li>
+                  <button>삭제</button>
+                </li> */}
+              </ul>
+            </div> 
+          ))}
+
       </section>
     </>
   );
@@ -194,14 +153,14 @@ const menuStyle = css`
     overflow: hidden;
     transition: transform 0.5s, opacity 0.5s;
   }
-  &.on > span:nth-child(1) {
+  &.on > span:nth-of-type(1) {
     transform: translateY(10px) rotate(-45deg);
     -webkit-transform: translateY(10px) rotate(-45deg);
   }
-  &.on > span:nth-child(2) {
+  &.on > span:nth-of-type(2) {
     opacity: 0;
   }
-  &.on > span:nth-child(3) {
+  &.on > span:nth-of-type(3) {
     transform: translateY(-8px) rotate(45deg);
     -webkit-transform: translateY(-8px) rotate(45deg);
   }
@@ -238,7 +197,7 @@ const contentStyle = css`
     margin: 0;
     line-height: 1.5em;
   }
-  & p:nth-child(1) {
+  & p:nth-of-type(1) {
     font-weight: 600;
     font-size: 18px;
   }
