@@ -15,6 +15,7 @@ const Home = () => {
 
   console.log(value, 'qpff');
   useEffect(() => {}, []);
+
   console.log(apiData, '클릭이벤트 실행시');
 
   const onClickHanddler = () => {
@@ -30,6 +31,9 @@ const Home = () => {
     setApiData(newValue);
     navigate("/map");
   };
+
+  console.log(listData, "가공")
+
   return <div onClick={onClickHanddler}>검색창 </div>;
 };
 

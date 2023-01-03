@@ -6,6 +6,7 @@ import axios from 'axios';
 
 /** @jsxImportSource @emotion/react */
 import { jsx, css } from '@emotion/react';
+import Item from './Item';
 
 const Map = () => {
   const [menuStatus, setMenuStatus] = useState(false);
@@ -13,8 +14,6 @@ const Map = () => {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
-  console.log(apiData);
-  
   const menuHandler = () => {
     setMenuStatus(!menuStatus);
   };
@@ -119,7 +118,6 @@ const Map = () => {
               </ul>
             </div> 
           ))}
-
       </section>
     </>
   );
@@ -188,44 +186,6 @@ const rightStyle = css`
   transition: right 1s;
   &.on {
     right: 0;
-  }
-`;
-const contentStyle = css`
-  border: 1px solid #dfdfdf;
-  padding: 15px;
-  & p {
-    margin: 0;
-    line-height: 1.5em;
-  }
-  & p:nth-of-type(1) {
-    font-weight: 600;
-    font-size: 18px;
-  }
-  & + & {
-    margin-top: 20px;
-  }
-  & p textarea {
-    width: 100%;
-    height: 100px;
-    border: 1px solid #dfdfdf;
-    resize: none;
-    padding: 10px;
-  }
-`;
-const btnStyle = css`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 10px;
-  & > li + li {
-    padding-left: 5px;
-  }
-  & > li > button {
-    border-radius: 0;
-    font-size: 14px;
-    border: 1px solid #7f7f7f;
-    padding: 5px 15px;
-    background-color: #dfdfdf;
-    cursor: pointer;
   }
 `;
 export default Map;
