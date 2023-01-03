@@ -2,10 +2,18 @@ import React, { useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { jsx, css } from '@emotion/react';
+import Item from './Item';
 
 const Map = () => {
   const [menuStatus, setMenuStatus] = useState(false);
 
+<<<<<<< Updated upstream
+=======
+
+
+  console.log(apiData);
+  
+>>>>>>> Stashed changes
   const menuHandler = () => {
     setMenuStatus(!menuStatus);
   };
@@ -27,6 +35,7 @@ const Map = () => {
         </div>
       </header>
       <section css={mapStyle}>지도 영역</section>
+<<<<<<< Updated upstream
       <section css={rightStyle} className={menuStatus ? 'on' : ''}>
         <div css={contentStyle}>
           <p>제목</p>
@@ -161,6 +170,28 @@ const Map = () => {
             </li>
           </ul>
         </div>
+=======
+      <section css={rightStyle} className={`${menuStatus ? 'on' : ''} menuConatiner`}>
+          { apiData && apiData.map((item, idx) => (
+            <Item key={idx} name={item.name} x={item.x} y={item.y}/>
+            // <div css={contentStyle} key={idx}>
+            //   <p>-  {item.name}</p>
+            //   <p>- 위치 : (위도 : {item.x}) , (경도 : {item.y})</p>
+            //   <p>- 메모 : 
+            //     <textarea placeholder='메모를 입력해주세요.'></textarea>
+            //   </p>
+            //   <ul css={btnStyle}>
+            //     <li>
+            //       <button>추가</button>
+            //     </li>
+            //     {/* <li>
+            //       <button>삭제</button>
+            //     </li> */}
+            //   </ul>
+            // </div> 
+          ))}
+
+>>>>>>> Stashed changes
       </section>
     </>
   );
@@ -231,6 +262,7 @@ const rightStyle = css`
     right: 0;
   }
 `;
+<<<<<<< Updated upstream
 const contentStyle = css`
   border: 1px solid #dfdfdf;
   padding: 15px;
@@ -269,4 +301,8 @@ const btnStyle = css`
     cursor: pointer;
   }
 `;
+=======
+
+
+>>>>>>> Stashed changes
 export default Map;
