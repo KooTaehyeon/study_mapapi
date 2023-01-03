@@ -102,21 +102,22 @@ const Map = () => {
       <section css={mapStyle}>지도 영역</section>
       <section css={rightStyle} className={`${menuStatus ? 'on' : ''} menuConatiner`}>
           { apiData && apiData.map((item, idx) => (
-            <div css={contentStyle} key={idx}>
-              <p>-  {item.name}</p>
-              <p>- 위치 : (위도 : {item.x}) , (경도 : {item.y})</p>
-              <p>- 메모 : 
-                <textarea placeholder='메모를 입력해주세요.'></textarea>
-              </p>
-              <ul css={btnStyle}>
-                <li>
-                  <button>추가</button>
-                </li>
-                {/* <li>
-                  <button>삭제</button>
-                </li> */}
-              </ul>
-            </div> 
+            <Item key={idx} id={idx} name={item.name} x={item.x} y={item.y}/>
+            // <div css={contentStyle} key={idx}>
+            //   <p>-  {item.name}</p>
+            //   <p>- 위치 : (위도 : {item.x}) , (경도 : {item.y})</p>
+            //   <p>- 메모 : 
+            //     <textarea placeholder='메모를 입력해주세요.'></textarea>
+            //   </p>
+            //   <ul css={btnStyle}>
+            //     <li>
+            //       <button>추가</button>
+            //     </li>
+            //     {/* <li>
+            //       <button>삭제</button>
+            //     </li> */}
+            //   </ul>
+            // </div> 
           ))}
       </section>
     </>
