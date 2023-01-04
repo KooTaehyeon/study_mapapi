@@ -32,8 +32,6 @@ const Home = () => {
     navigate("/map");
   };
 
-  console.log(listData, "가공")
-
   return <div onClick={onClickHanddler}>검색창 </div>;
 };
 

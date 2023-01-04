@@ -3,7 +3,7 @@
 import { jsx, css } from '@emotion/react';
 import { useState } from 'react';
 
-const Item = ({idx, name, x, y}) => {
+const Item = ({id, name, x, y}) => {
   const [text, setText] = useState('');
   
 
@@ -13,13 +13,16 @@ const Item = ({idx, name, x, y}) => {
 
   const onSubmit = () => {
     const body = {
-      id : idx,
+      id : id,
       name : name,
       x : x,
       y : y ,
       text : text,
     }
-    console.log(body);
+    const bodyString = JSON.stringify(body)
+    localStorage.setItem('body.id', bodyString)
+    console.log(JSON.parse(localStorage.getItem('body.id')))
+    console.log("clicked!")
   }
 
   return(
@@ -31,7 +34,7 @@ const Item = ({idx, name, x, y}) => {
         </p>
         <ul css={btnStyle}>
           <li>
-            <button onClick={onSubmit(idx, x, y)}>추가</button>
+            <button onClick={onSubmit}>추가</button>
           </li>
           {/* <li>
             <button>삭제</button>

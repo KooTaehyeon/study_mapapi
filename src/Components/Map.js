@@ -7,6 +7,7 @@ import axios from 'axios';
 /** @jsxImportSource @emotion/react */
 import { jsx, css } from '@emotion/react';
 import Item from './Item';
+import { useNavigate } from 'react-router-dom';
 
 const Map = () => {
   const [menuStatus, setMenuStatus] = useState(false);
@@ -81,7 +82,11 @@ const Map = () => {
     return () => menuContainer.removeEventListener("scroll", _infiniteScroll, true);
   }, [_infiniteScroll])
 
-  // console.log(value,'value');
+  const navigate = useNavigate()
+
+  const onNavigateMemo = () => {
+    navigate("/Memo")
+  }
 
   return (
     <>
@@ -101,23 +106,9 @@ const Map = () => {
       </header>
       <section css={mapStyle}>지도 영역</section>
       <section css={rightStyle} className={`${menuStatus ? 'on' : ''} menuConatiner`}>
-          { apiData && apiData.map((item, idx) => (
-            <Item key={idx} id={idx} name={item.name} x={item.x} y={item.y}/>
-            // <div css={contentStyle} key={idx}>
-            //   <p>-  {item.name}</p>
-            //   <p>- 위치 : (위도 : {item.x}) , (경도 : {item.y})</p>
-            //   <p>- 메모 : 
-            //     <textarea placeholder='메모를 입력해주세요.'></textarea>
-            //   </p>
-            //   <ul css={btnStyle}>
-            //     <li>
-            //       <button>추가</button>
-            //     </li>
-            //     {/* <li>
-            //       <button>삭제</button>
-            //     </li> */}
-            //   </ul>
-            // </div> 
+        <button onClick={onNavigateMemo}>이동</button>
+          { apiData && apiData.map((item) => (
+            <Item key={item.id} id={item.id} name={item.name} x={item.x} y={item.y}/>
           ))}
       </section>
     </>
