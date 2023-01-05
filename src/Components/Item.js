@@ -1,12 +1,13 @@
 
 /** @jsxImportSource @emotion/react */
 import { jsx, css } from '@emotion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Item = ({id, name, x, y}) => {
   const [text, setText] = useState('');
+  const [Storage, setStorage] = useState([]);
+  const [is,setIs]= useState(false)
   
-
   const onChange = (event) => {
     setText(event.target.value);
   }
@@ -18,12 +19,54 @@ const Item = ({id, name, x, y}) => {
       x : x,
       y : y ,
       text : text,
-    }
+    } 
     const bodyString = JSON.stringify(body)
-    localStorage.setItem('body.id', bodyString)
-    console.log(JSON.parse(localStorage.getItem('body.id')))
-    console.log("clicked!")
+    if(!JSON.parse(localStorage.getItem('body.id'))){
+      const so = bodyString;
+      localStorage.setItem('body.id', so)
+      console.log(JSON.parse(localStorage.getItem('body.id')))
+      
+      console.log("clicked!")
+    }else{
+      if (JSON.parse(localStorage.getItem('body.id')).length >= 2) {
+        let result = []
+
+        const bsj = JSON.parse(bodyString)
+        const ssj = JSON.parse(localStorage.getItem('body.id'))
+        console.log(...JSON.parse(localStorage.getItem('body.id')),'sdfds')
+        result = [...ssj, {...bsj}];
+        console.log(result, 'result')
+        const results = JSON.stringify(result)
+        console.log(results)
+        localStorage.setItem('body.id', results)
+        console.log(JSON.parse(localStorage.getItem('body.id')),'sdfsdf')
+  
+        console.log(JSON.parse(localStorage.getItem('body.id')).length,'sdfsdf22222')
+        console.log("clicked!3")
+      } else {
+        let result = []
+        const bsj = JSON.parse(bodyString)
+        const ssj = JSON.parse(localStorage.getItem('body.id'))
+        result = [{...ssj}, {...bsj}];
+        console.log(result, 'result')
+        const results = JSON.stringify(result)
+        localStorage.setItem('body.id', results)
+        console.log(JSON.parse(localStorage.getItem('body.id')),'sdfsdf')
+  
+        console.log(JSON.parse(localStorage.getItem('body.id')).length,'sdfsdf22222')
+        console.log("clicked!2")
+      }
+    }
+    setIs(true);
   }
+  useEffect(()=>{
+    if(!is) return;
+    const StorageJSON = JSON.parse(localStorage.getItem('body.id'))
+    setStorage(StorageJSON);
+    console.log(Storage, 'Storage')
+    setIs(false);
+    console.log(44)
+  },[onSubmit])
 
   return(
     <div css={contentStyle}>
