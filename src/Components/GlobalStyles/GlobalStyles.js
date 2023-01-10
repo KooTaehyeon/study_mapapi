@@ -13,7 +13,6 @@ const GlobalStyles = () => {
             border: 0px;
             font: inherit;
             vertical-align: baseline;
-            box-sizing: border-box;
           }
           a {
             text-decoration: none;
@@ -24,7 +23,6 @@ const GlobalStyles = () => {
             margin: 0;
             padding: 0;
           }
-          body{ overflow:hidden; }
         }
       `}
     />
