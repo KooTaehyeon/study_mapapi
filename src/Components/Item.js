@@ -3,7 +3,7 @@
 import { jsx, css } from '@emotion/react';
 import { useState } from 'react';
 
-const Item = ({idx, name, x, y}) => {
+const Item = ({idx, name, x, y, onUpdateMap}) => {
   const [text, setText] = useState('');
   
 
@@ -32,6 +32,7 @@ const Item = ({idx, name, x, y}) => {
         <ul css={btnStyle}>
           <li>
             <button onClick={onSubmit(idx, x, y)}>추가</button>
+            <button onClick={() => {onUpdateMap(name, x, y, text)}}>보기</button>
           </li>
           {/* <li>
             <button>삭제</button>
