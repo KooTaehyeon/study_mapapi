@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState, useRef } from 'react';
 import { schoolApi } from '../Context/globalContext';
 import useFetch from '../hook/useApi';
 import XMLParser from 'react-xml-parser';
@@ -13,6 +13,11 @@ const Map = () => {
   const { apiData, setApiData } = useContext(schoolApi);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [selectedItemStatus, setSelectedItemStatus] = useState(["파술소를 선택해주세요.", "37.597013003652336", "127.05386856941846", "없음"]);
+  const [effectOnce, setEffectOnce] = useState(false);
+  const [overlay, setOverlay] = useState(false);
+
+  const mapElement = useRef(null);
 
   const menuHandler = () => {
     setMenuStatus(!menuStatus);
@@ -71,6 +76,67 @@ const Map = () => {
       
   }, []);
 
+  /*
+  * 네이버 지도 생성 및 초기화
+  */
+  useEffect(() => {
+    const { naver } = window;
+    if (!mapElement.current || !naver) return;
+    
+    var centerLocation = new naver.maps.LatLng(selectedItemStatus[1], selectedItemStatus[2]);
+    const map = new naver.maps.Map(mapElement.current, {
+      center: centerLocation,
+      zoom: 17,
+    });
+    new naver.maps.Marker({
+      position: centerLocation,
+      map,
+    });
+  }, []);
+
+  /*
+   * 사용자가 파출소 정보(selectedItemStatus 가 변경될 시) 지도 및 오버레이 업데이트
+   */
+  useEffect(() => {
+    if(!effectOnce) {setEffectOnce(true);return;}
+    const { naver } = window;
+    if (!mapElement.current || !naver) return;
+
+    var selectedItemName = selectedItemStatus[0];
+    var selectedItemNote = selectedItemStatus[3];
+    var centerLocation = new naver.maps.LatLng(selectedItemStatus[2], selectedItemStatus[1]);
+    
+    // 새로운 네이버 맵 생성..(기존 지도를 업데이트 하도록 수정)
+    const map = new naver.maps.Map(mapElement.current, {
+      center: centerLocation,
+      zoom: 17,
+    });
+    // 아마도 마커 제거
+    new naver.maps.Marker(null);
+    // 마커 생성
+    new naver.maps.Marker({
+      position: centerLocation,
+      map,
+    });
+
+    // 네이버 API 헤더 내 공백 문제로 axios 사용 불가..
+    /*
+    const baseUrl = "https://naveropenapi.apigw.ntruss.com/map-reversegeocode/v2/gc";
+    const client_id = "jqnqizu970";
+    const client_secret = "QJgaBXPXVRVNbSUBQexgMJsSW7R6JRQ7iAqYhrG9";
+    var coords = selectedItemStatus[2] + "," + selectedItemStatus[1];
+    axios.get(baseUrl + "?coords=" + coords + "&output=json&order=addr", {
+        headers: {
+        'X-NCP-APIGW-API-KEY-ID':client_id,
+        'X-NCP-APIGW-API-KEY':client_secret
+      }
+    }).then(({response}) => console.log("주소 검색 결과:\n" + response));    
+    */
+    
+    toggleOverlay(true);
+
+  }, [selectedItemStatus]);
+
   useEffect(() => {
     getNewData();
   } , [page])
@@ -82,6 +148,23 @@ const Map = () => {
   }, [_infiniteScroll])
 
   // console.log(value,'value');
+
+  const onUpdateMap = (name, x, y, text) => {
+    console.log(name + "로 지도 이동\n좌표:" + x + ", " + y + "\n메모:" + text);
+    setSelectedItemStatus([name, x, y, text]);
+  }
+
+  /*
+   * 오버레이 토글 
+   */
+  const toggleOverlay = (isOverlay) => {
+    const overlay = document.getElementById('overlay');
+    if(isOverlay) {
+      overlay.setAttribute("style", overlay.getAttribute("style").replace("display: none", ""));
+    }else {
+      overlay.setAttribute("style", overlay.getAttribute("style") + "display: none");
+    }
+  }
 
   return (
     <>
@@ -99,10 +182,23 @@ const Map = () => {
           <span></span>
         </div>
       </header>
-      <section css={mapStyle}>지도 영역</section>
+      <div ref={mapElement} style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '100%',
+          height: 'calc(100vh - 45px)',
+          backgroundColor: '#dfdfdf'
+        }} />
+        <div id='overlay' style={{position: 'absolute', width: '200px', minHeight: '200px', backgroundColor: 'white', top: '0px', marginLeft: '10vw', marginTop: '20vh', borderRadius: '10px', boxShadow: '1px 1px 3px gainboro', paddingLeft: '20px', paddingRight: '20px', wordBreak: 'keep-all', boxShadow: '1px 1px 3px grey'}}>
+          <h6 style={{textAlign: 'end', marginTop: '14px', marginBottom: '2px', fontSize: '14px'}} onClick={() => {toggleOverlay(false)}}>x</h6>
+          <h4 style={{marginTop: '0px'}}>이름: <span>{selectedItemStatus[0]}</span></h4>
+          <h5>좌표: <span>{selectedItemStatus[1] + ", " + selectedItemStatus[2]}</span></h5>
+          <h5>메모: <span>{selectedItemStatus[3]}</span></h5>
+        </div>
       <section css={rightStyle} className={`${menuStatus ? 'on' : ''} menuConatiner`}>
           { apiData && apiData.map((item, idx) => (
-            <Item key={idx} id={idx} name={item.name} x={item.x} y={item.y}/>
+            <Item key={idx} id={idx} name={item.name} x={item.x} y={item.y} onUpdateMap={onUpdateMap}/>
             // <div css={contentStyle} key={idx}>
             //   <p>-  {item.name}</p>
             //   <p>- 위치 : (위도 : {item.x}) , (경도 : {item.y})</p>
